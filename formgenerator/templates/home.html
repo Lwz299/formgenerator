@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}الرئيسية - تطبيق التقييم الذكي{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="mb-0"><i class="bi bi-clipboard-data"></i> النماذج المتاحة</h2>
+    <p class="text-muted mb-0">يمكنك تعبئة النماذج أو مشاركتها مع الآخرين بكل سهولة.</p>
+  </div>
+  
+  {% if user.is_authenticated %}
+  <a href="{% url 'create_form' %}" class="btn btn-primary">
+    <i class="bi bi-plus-lg"></i> إنشاء نموذج جديد
+  </a>
+  {% endif %}
+</div>
+
+{% if forms %}
+<div class="row">
+  {% for form in forms %}
+  <div class="col-md-6 mb-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title text-primary">
+          <i class="bi bi-journal-check"></i> {{ form.name }}
+        </h5>
+        <p class="card-text">{{ form.description|default:"لا يوجد وصف." }}</p>
+
+        <p class="text-muted small">
+          <i class="bi bi-chat-dots"></i> عدد الردود: {{ form.formsubmission_set.count }}
+        </p>
+
+        <div class="d-flex flex-wrap gap-2">
+          <a href="{% url 'fill_form' form.id %}" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-pencil-square"></i> تعبئة النموذج
+          </a>
+
+          {% if user.is_authenticated and form.created_by == user %}
+          <a href="{% url 'view_submissions' form.id %}" class="btn btn-outline-info btn-sm">
+            <i class="bi bi-list-ul"></i> عرض الردود
+          </a>
+
+          <a href="{% url 'confirm_delete_form' form.id %}" class="btn btn-outline-danger btn-sm"
+             onclick="return confirm('هل أنت متأكد من رغبتك في حذف هذا النموذج؟');">
+            <i class="bi bi-trash"></i> حذف النموذج
+          </a>
+          {% endif %}
+
+          <button class="btn btn-outline-secondary btn-sm"
+                  onclick="copyToClipboard('{{ request.build_absolute_uri }}form/{{ form.id }}/fill/')">
+            <i class="bi bi-share"></i> نسخ الرابط
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center">
+  لا توجد نماذج متاحة حالياً.
+</div>
+{% endif %}
+
+{% if not user.is_authenticated %}
+<div class="text-center mt-4">
+  <a href="{% url 'login' %}" class="btn btn-primary">
+    <i class="bi bi-box-arrow-in-right"></i> سجّل الدخول لإنشاء نموذج
+  </a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function copyToClipboard(link) {
+  navigator.clipboard.writeText(link)
+    .then(() => alert("✅ تم نسخ رابط النموذج إلى الحافظة!"))
+    .catch(() => alert("❌ حدث خطأ أثناء النسخ."));
+}
+</script>
+{% endblock %}

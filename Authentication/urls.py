@@ -20,4 +20,5 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('usermanagement.urls')),  # Include the user management app's URLs
+    path('',include('formgenerator.urls')),  # Include the form generator app's URLs
 ]

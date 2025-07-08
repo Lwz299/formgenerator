@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./output.css" rel="stylesheet">
+    <title>Add Case</title>
+</head>
+<body>
+    <div class="container mx-auto p-4 bg-gray-100">
+        <h1 class="text-2xl font-bold mb-4 text-primary">Add New Case</h1>
+        <form class="bg-white shadow-md rounded-3xl px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label class="block text-primary text-sm font-bold mb-2" for="caseTitle">
+                    Case Title
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="caseTitle" type="text" placeholder="Enter case title">
+            </div>
+            <div class="mb-4">
+                <label class="block text-primary text-sm font-bold mb-2" for="caseDescription">
+                    Case Description
+                </label>
+                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none" id="caseDescription" placeholder="Enter case description"></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-primary text-sm font-bold mb-2" for="caseDate">
+                    Case Date
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="caseDate" type="date">
+            </div>
+            <div class="mb-4">
+                <label class="block text-primary text-sm font-bold mb-2" for="doctorName">
+                    Doctor's Name
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="doctorName" type="text" placeholder="Enter doctor's name">
+            </div>
+            <div class="mb-4">
+                <label class="block text-primary text-sm font-bold mb-2" for="doctorSpecialization">
+                    Doctor's Specialization
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="doctorSpecialization" type="text" placeholder="Enter doctor's specialization">
+            </div>
+            <div class="mb-4">
+                <label class="block text-primary text-sm font-bold mb-2" for="doctorContact">
+                    Doctor's Contact
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="doctorContact" type="text" placeholder="Enter doctor's contact">
+            </div>
+            <div class="mb-4">
+                <label class="block text-primary text-sm font-bold mb-2" for="patientHistory">
+                    Patient History
+                </label>
+                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none" id="patientHistory" placeholder="Enter patient history"></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-primary text-sm font-bold mb-2" for="previousMedications">
+                    Previous Medications
+                </label>
+                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none" id="previousMedications" placeholder="Enter previous medications"></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-primary text-sm font-bold mb-2" for="allergies">
+                    Allergies
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="allergies" type="text" placeholder="Enter known allergies">
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-primary hover:bg-primaryHover transition-all duration-200 text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline" type="button">
+                    Submit
+                </button>
+                <a href="index.html" class="text-primary hover:text-primary font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Back to Home
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

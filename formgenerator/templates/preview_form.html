@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}معاينة النموذج{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-sm rounded-4">
+    <div class="card-body">
+      <h2 class="text-center mb-4 text-primary">
+        <i class="bi bi-eye"></i> معاينة النموذج: {{ form_template.name }}
+      </h2>
+
+      <form>
+        {% if fields %}
+          {% for field in fields %}
+            <div class="mb-3">
+              <label class="form-label fw-bold">{{ field.label }} {% if field.required %}<span class="text-danger">*</span>{% endif %}</label>
+
+              {% if field.field_type == 'text' %}
+                <input type="text" class="form-control" disabled>
+
+              {% elif field.field_type == 'textarea' %}
+                <textarea class="form-control" rows="3" disabled></textarea>
+
+              {% elif field.field_type == 'number' %}
+                <input type="number" class="form-control" disabled>
+
+              {% elif field.field_type == 'date' %}
+                <input type="date" class="form-control" disabled>
+
+              {% elif field.field_type == 'checkbox' %}
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" disabled>
+                  <label class="form-check-label">خيار</label>
+                </div>
+
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-muted text-center">لا توجد حقول لعرضها.</p>
+        {% endif %}
+      </form>
+
+      <!-- أزرار التحكم -->
+      <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
+        <!-- زر تعديل النموذج -->
+        <a href="{% url 'add_fields' form_template.id %}" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left-circle"></i> تعديل النموذج
+        </a>
+
+        <!-- نسخ رابط النموذج إذا كان منشور -->
+        {% if form_template.is_public %}
+          <div class="input-group w-auto">
+            <input id="formLink" type="text" class="form-control" 
+                   value="{{ request.build_absolute_uri|cut:'preview/' }}fill/" readonly>
+            <button class="btn btn-outline-primary" onclick="copyLink()">
+              <i class="bi bi-clipboard"></i> نسخ الرابط
+            </button>
+          </div>
+        {% else %}
+          <div class="alert alert-warning mb-0">لن تتمكن من مشاركة الرابط حتى يتم نشر النموذج.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- سكربت النسخ -->
+<script>
+  function copyLink() {
+    var copyText = document.getElementById("formLink");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // للجوال
+    document.execCommand("copy");
+    alert("تم نسخ رابط النموذج: " + copyText.value);
+  }
+</script>
+{% endblock %}

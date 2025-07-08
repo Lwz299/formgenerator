@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}تأكيد حذف النموذج{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="alert alert-danger">
+    <h4 class="alert-heading">تأكيد حذف النموذج</h4>
+    <p>هل أنت متأكد من رغبتك في حذف النموذج: <strong>{{ form_template.name }}</strong>؟</p>
+    <hr>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">نعم، احذف النموذج</button>
+      <a href="{% url 'home' %}" class="btn btn-secondary ms-2">إلغاء</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

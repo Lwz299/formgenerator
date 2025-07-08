@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}شكرًا لتعبئتك النموذج{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+  <div class="alert alert-success py-4">
+    <h2 class="mb-3">🎉 شكرًا لك!</h2>
+    <p class="lead">تم إرسال النموذج بنجاح. سنقوم بمراجعة البيانات في أقرب وقت.</p>
+  </div>
+
+  <div class="mt-4">
+    <a href="{% url 'home' %}" class="btn btn-primary">
+      <i class="bi bi-house-door"></i> العودة إلى الصفحة الرئيسية
+    </a>
+  </div>
+</div>
+{% endblock %}

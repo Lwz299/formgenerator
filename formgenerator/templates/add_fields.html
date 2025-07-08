@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-sm rounded-4">
+    <div class="card-body p-4">
+      <h2 class="mb-4 text-center text-success">
+        إضافة الحقول إلى النموذج: {{ form_template.name }}
+      </h2>
+
+      <!-- نموذج الإضافة/التحديث -->
+      <form id="fieldForm" onsubmit="submitFieldForm(event)">
+        {% csrf_token %}
+        <input type="hidden" id="editFieldId" value="">
+
+        <div class="mb-3">
+          <label class="form-label">عنوان الحقل</label>
+          {{ field_form.label|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">نوع الحقل</label>
+          {{ field_form.field_type|add_class:"form-select" }}
+        </div>
+
+        <div class="form-check form-switch mb-4">
+          {{ field_form.required|add_class:"form-check-input" }}
+          <label class="form-check-label">مطلوب؟</label>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-success" id="submitBtn">إضافة الحقل</button>
+          <button type="button" class="btn btn-secondary d-none" id="cancelEdit" onclick="resetForm()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if fields %}
+  <div class="card mt-5 shadow-sm rounded-4">
+    <div class="card-body">
+      <h4 class="mb-3">الحقول الحالية:</h4>
+      <ul class="list-group" id="fieldList">
+        {% for field in fields %}
+        <li class="list-group-item d-flex justify-content-between align-items-center" id="field-{{ field.id }}">
+          <div>
+            <strong>{{ field.label }}</strong>
+            <span class="badge bg-primary">{{ field.get_field_type_display }}</span>
+          </div>
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-secondary" onclick="editField('{{ field.id }}')">تعديل</button>
+            <button class="btn btn-outline-danger" onclick="deleteField('{{ field.id }}')">حذف</button>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="mt-4 d-flex justify-content-end">
+    <a href="{% url 'preview_form' form_template.id %}" class="btn btn-primary">التالي</a>
+  </div>
+</div>
+
+<script>
+  function getCSRFToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+  }
+
+  function deleteField(fieldId) {
+    if (confirm("هل تريد حذف هذا الحقل؟")) {
+      fetch(`/ajax/delete_field/${fieldId}/`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCSRFToken() },
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById(`field-${fieldId}`).remove();
+        }
+      });
+    }
+  }
+
+  function editField(fieldId) {
+    fetch(`/ajax/get_field/${fieldId}/`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("id_label").value = data.label;
+        document.getElementById("id_field_type").value = data.field_type;
+        document.getElementById("id_required").checked = data.required;
+        document.getElementById("editFieldId").value = fieldId;
+
+        document.getElementById("submitBtn").textContent = "تحديث الحقل";
+        document.getElementById("cancelEdit").classList.remove("d-none");
+      });
+  }
+
+  function resetForm() {
+    document.getElementById("id_label").value = "";
+    document.getElementById("id_field_type").value = "text";
+    document.getElementById("id_required").checked = false;
+    document.getElementById("editFieldId").value = "";
+
+    document.getElementById("submitBtn").textContent = "إضافة الحقل";
+    document.getElementById("cancelEdit").classList.add("d-none");
+  }
+
+  function submitFieldForm(event) {
+    event.preventDefault();
+    const fieldId = document.getElementById("editFieldId").value;
+    const label = document.getElementById("id_label").value;
+    const fieldType = document.getElementById("id_field_type").value;
+    const required = document.getElementById("id_required").checked;
+
+    const formData = new FormData();
+    formData.append('label', label);
+    formData.append('field_type', fieldType);
+    formData.append('required', required);
+
+    const url = fieldId
+      ? `/field/${fieldId}/edit/`
+      : "{% url 'add_fields' form_template.id %}";
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCSRFToken() },
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert("حدث خطأ في الحفظ");
+      }
+    });
+  }
+</script>
+{% endblock %}
